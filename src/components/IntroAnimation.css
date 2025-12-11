@@ -1,0 +1,104 @@
+.intro-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(ellipse at center, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  z-index: 9999;
+}
+
+/* Galaxy Background */
+.galaxy-bg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.stars, .stars2 {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+}
+
+.stars {
+  background-image: 
+    radial-gradient(2px 2px at 20px 30px, #eee, transparent),
+    radial-gradient(2px 2px at 40px 70px, gold, transparent),
+    radial-gradient(1px 1px at 90px 40px, #fff, transparent);
+  background-repeat: repeat;
+  background-size: 200px 100px;
+  animation: sparkle 3s linear infinite;
+}
+
+.stars2 {
+  background-image: 
+    radial-gradient(1px 1px at 40px 60px, #fff, transparent),
+    radial-gradient(2px 2px at 160px 30px, #ffd700, transparent);
+  background-repeat: repeat;
+  background-size: 300px 150px;
+  animation: sparkle 2s linear infinite reverse;
+}
+
+@keyframes sparkle {
+  from { transform: translateY(0px); }
+  to { transform: translateY(-100px); }
+}
+
+/* NJ Animation */
+.nj-animation {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.nj-letters {
+  font-size: 120px;
+  font-weight: 900;
+  background: linear-gradient(45deg, #ffd700, #ffed4e, #ffd700, #ffb347);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* NJ Stage */
+.nj-animation.nj .nj-letters {
+  transform: scale(1);
+  opacity: 1;
+  animation: goldShine 2s ease-in-out infinite;
+}
+
+/* Zoom Stage */
+.nj-animation.zoom .nj-letters {
+  transform: scale(3);
+  opacity: 0.9;
+  filter: blur(1px);
+}
+
+/* Pop Stage */
+.nj-animation.pop .nj-letters {
+  transform: scale(4.5);
+  opacity: 0.3;
+  filter: blur(3px);
+}
+
+@keyframes goldShine {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .nj-letters { font-size: 80px; }
+  .nj-animation.zoom .nj-letters { transform: scale(2.5); }
+  .nj-animation.pop .nj-letters { transform: scale(3.5); }
+}

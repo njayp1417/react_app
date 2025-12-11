@@ -1,0 +1,282 @@
+.home-container {
+  position: relative;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #000000 0%, #1a1a1a 25%, #000000 50%, #0d0d0d 75%, #000000 100%);
+  padding: 20px;
+  overflow: hidden;
+}
+
+.home-header {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.greeting {
+  font-size: 32px;
+  font-weight: 700;
+  background: linear-gradient(45deg, #ffd700, #ffed4e, #ffd700);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: goldShine 3s ease-in-out infinite;
+  margin-bottom: 15px;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+.location {
+  font-size: 18px;
+  color: rgba(255, 215, 0, 0.8);
+  font-weight: 500;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+@keyframes goldShine {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.time-zones {
+  position: relative;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+  margin-bottom: 50px;
+}
+
+.time-card {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  padding: 35px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.time-card.active {
+  border-color: rgba(255, 215, 0, 0.6);
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+  transform: translateY(-5px) scale(1.02);
+}
+
+.time-label {
+  color: rgba(255, 215, 0, 0.9);
+  margin-bottom: 20px;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+.time {
+  font-size: 42px;
+  font-weight: 800;
+  color: #ffd700;
+  margin-bottom: 15px;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+}
+
+.date {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  font-weight: 500;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+.quotes-section {
+  position: relative;
+  z-index: 10;
+  background: linear-gradient(135deg, 
+    rgba(255, 215, 0, 0.15) 0%,
+    rgba(255, 215, 0, 0.05) 100%
+  );
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  padding: 40px;
+  border-radius: 25px;
+  text-align: center;
+  margin-bottom: 50px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.quote-type-indicator {
+  margin-bottom: 20px;
+}
+
+.type-badge {
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+.type-badge.motivational {
+  background: linear-gradient(135deg, #FF4444, #FF6B6B);
+  color: white;
+  box-shadow: 0 0 15px rgba(255, 68, 68, 0.3);
+}
+
+.type-badge.love {
+  background: linear-gradient(135deg, #ffd700, #ffed4e);
+  color: #000;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+}
+
+.type-badge.affirmation {
+  background: linear-gradient(135deg, #9C27B0, #BA68C8);
+  color: white;
+  box-shadow: 0 0 15px rgba(156, 39, 176, 0.3);
+}
+
+.quote-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.quote-text {
+  font-size: 24px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+  line-height: 1.4;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+  animation: quoteAppear 0.8s ease-out;
+}
+
+
+
+@keyframes quoteAppear {
+  0% { 
+    opacity: 0; 
+    transform: translateY(20px) scale(0.95); 
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateY(0) scale(1); 
+  }
+}
+
+
+
+.quick-actions {
+  position: relative;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+  margin-bottom: 50px;
+}
+
+.action-card {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  padding: 35px 25px;
+  border-radius: 18px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.action-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 215, 0, 0.5);
+}
+
+.action-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.action-card:hover::before {
+  left: 100%;
+}
+
+.action-icon {
+  font-size: 28px;
+  margin-bottom: 18px;
+  color: #ffd700;
+  font-weight: 600;
+}
+
+.action-text {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  font-size: 16px;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  position: relative;
+  z-index: 1;
+}
+
+.love-message {
+  position: relative;
+  z-index: 10;
+  background: linear-gradient(135deg, 
+    rgba(255, 215, 0, 0.1) 0%,
+    rgba(255, 215, 0, 0.05) 100%
+  );
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  padding: 35px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.love-text {
+  font-size: 20px;
+  color: rgba(255, 215, 0, 0.95);
+  font-style: italic;
+  font-weight: 500;
+  margin: 0;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  line-height: 1.6;
+  text-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+}
+
+@media (max-width: 768px) {
+  .time-zones {
+    grid-template-columns: 1fr;
+  }
+  
+  .quick-actions {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .quote-text {
+    font-size: 20px;
+  }
+}
