@@ -30,6 +30,7 @@ function MainApp() {
 }
 
 export default function App() {
+  // Force deployment - v2
   const [user, setUser] = useState(null);
   const [initializing, setInitializing] = useState(true);
   const [showIntro, setShowIntro] = useState(true);
