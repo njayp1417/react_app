@@ -7,27 +7,11 @@ const MAX_FILE_SIZE = parseInt(process.env.REACT_APP_MAX_FILE_SIZE) || 50 * 1024
 const MAX_VIDEO_DURATION = parseInt(process.env.REACT_APP_MAX_VIDEO_DURATION) || 300;
 const MAX_IMAGE_DIMENSION = parseInt(process.env.REACT_APP_MAX_IMAGE_DIMENSION) || 2048;
 
-// Get encryption key from Supabase Vault (production) or fallback
+// Get encryption key from environment or fallback
 const getEncryptionKey = async () => {
   if (CACHED_SECRET) return CACHED_SECRET;
   
-  try {
-    // Try to get key from Supabase Vault
-    const { data, error } = await supabase
-      .from('vault')
-      .select('secret')
-      .eq('name', 'encryption_key')
-      .single();
-    
-    if (!error && data?.secret) {
-      CACHED_SECRET = data.secret;
-      return CACHED_SECRET;
-    }
-  } catch (error) {
-    console.warn('Supabase Vault not available, using fallback key');
-  }
-  
-  // Fallback to environment or hardcoded key
+  // Use environment variable or fallback key
   CACHED_SECRET = process.env.REACT_APP_ENCRYPTION_KEY || FALLBACK_SECRET;
   return CACHED_SECRET;
 };
