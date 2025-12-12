@@ -18,9 +18,39 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  font-size: 18px;
-  color: #FF6B9D;
-  background: linear-gradient(135deg, #FFE5F1 0%, #FFF0F5 100%);
+  font-size: 24px;
+  font-weight: 600;
+  color: #FFD700;
+  background: linear-gradient(135deg, #000000 0%, #1a1a1a 25%, #000000 50%, #0d0d0d 75%, #000000 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.loading::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(2px 2px at 20px 30px, #ffd700, transparent),
+    radial-gradient(1px 1px at 40px 70px, #fff, transparent),
+    radial-gradient(3px 3px at 90px 40px, #ffd700, transparent);
+  background-repeat: repeat;
+  background-size: 200px 100px;
+  animation: sparkle 8s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.loading span {
+  position: relative;
+  z-index: 2;
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+}
+
+@keyframes sparkle {
+  from { transform: translateY(0px); }
+  to { transform: translateY(-100px); }
 }
 
 * {

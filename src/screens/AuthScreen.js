@@ -11,6 +11,9 @@ export default function AuthScreen() {
     setIsAnimating(true);
     
     try {
+      // Store the user choice permanently
+      localStorage.setItem('userChoice', userType);
+      
       // Start Google OAuth for the selected user
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
@@ -24,9 +27,6 @@ export default function AuthScreen() {
       });
 
       if (error) throw error;
-      
-      // Store selected user type in localStorage for verification after OAuth
-      localStorage.setItem('selectedUserType', userType);
       
     } catch (error) {
       console.error('Google login error:', error);

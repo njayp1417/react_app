@@ -113,15 +113,94 @@
   margin-bottom: 40px;
 }
 
-.turn-indicator h3 {
-  color: #ffd700;
-  font-size: 24px;
-  margin-bottom: 10px;
+.turn-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.current-player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 20px 30px;
+  background: linear-gradient(135deg, 
+    rgba(255, 215, 0, 0.15) 0%,
+    rgba(0, 0, 0, 0.8) 50%,
+    rgba(255, 215, 0, 0.15) 100%
+  );
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(255, 215, 0, 0.4);
+  border-radius: 20px;
+  box-shadow: 
+    0 0 30px rgba(255, 215, 0, 0.3),
+    inset 0 0 20px rgba(255, 215, 0, 0.1);
+  animation: prismGlow 3s ease-in-out infinite;
+}
+
+.player-name {
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  background: linear-gradient(45deg, #FFD700, #FFA500, #FFD700);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: nameShine 2s ease-in-out infinite;
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+}
+
+.player-name.nelson {
+  background: linear-gradient(45deg, #FFD700, #FF6B35, #FFD700);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.player-name.juliana {
+  background: linear-gradient(45deg, #FFD700, #9C27B0, #FFD700);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.turn-label {
+  color: rgba(255, 215, 0, 0.8);
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+@keyframes prismGlow {
+  0%, 100% { 
+    box-shadow: 
+      0 0 30px rgba(255, 215, 0, 0.3),
+      inset 0 0 20px rgba(255, 215, 0, 0.1);
+  }
+  50% { 
+    box-shadow: 
+      0 0 50px rgba(255, 215, 0, 0.5),
+      inset 0 0 30px rgba(255, 215, 0, 0.2);
+  }
+}
+
+@keyframes nameShine {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
 .waiting-text {
   color: rgba(255, 255, 255, 0.7);
   font-style: italic;
+  font-size: 16px;
+  margin-top: 10px;
 }
 
 /* Game Button */
@@ -460,5 +539,19 @@
   
   .button-icon {
     font-size: 28px;
+  }
+  
+  .current-player {
+    padding: 15px 20px;
+  }
+  
+  .player-name {
+    font-size: 24px;
+    letter-spacing: 2px;
+  }
+  
+  .turn-label {
+    font-size: 12px;
+    letter-spacing: 1px;
   }
 }

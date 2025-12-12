@@ -14,8 +14,16 @@ export default function ProfileScreen() {
 
   const isNelson = user?.email?.includes('nelson');
 
-  const handleSignOut = () => {
-    supabase.auth.signOut();
+  const handleSignOut = async () => {
+    try {
+      localStorage.clear();
+      sessionStorage.clear();
+      await supabase.auth.signOut();
+      window.location.reload();
+    } catch (error) {
+      console.error('Sign out error:', error);
+      window.location.reload();
+    }
   };
 
   return (

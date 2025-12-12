@@ -34,26 +34,25 @@ const DARE_DATABASE = [
 ];
 
 export default function TruthOrDareScreen() {
-  const [user, setUser] = useState(null);
+  const [userChoice, setUserChoice] = useState(null);
   const [gameState, setGameState] = useState({ current_turn: 'nelson', waiting_for_answer: false });
   const [isMyTurn, setIsMyTurn] = useState(false);
-  const [buttonState, setButtonState] = useState('PLAY A GAME'); // 'PLAY A GAME', 'SENT', 'WAIT FOR TURN'
 
   useEffect(() => {
-    const savedUser = localStorage.getItem('loveapp_user');
-    if (savedUser) {
-      const userData = JSON.parse(savedUser);
-      setUser(userData);
+    // Get user choice from localStorage
+    const choice = localStorage.getItem('userChoice');
+    if (choice) {
+      setUserChoice(choice);
     }
   }, []);
 
   useEffect(() => {
-    if (user) {
+    if (userChoice) {
       loadGameState();
       const unsubscribe = subscribeToGameState();
       return unsubscribe;
     }
-  }, [user]);
+  }, [userChoice]);
 
   const loadGameState = async () => {
     const { data } = await supabase.from('game_state').select('*').single();
@@ -75,33 +74,17 @@ export default function TruthOrDareScreen() {
   };
 
   const updateButtonState = (state) => {
-    if (!user) return;
+    if (!userChoice) return;
     
-    const isMyTurn = state.current_turn === user.userType;
-    const waitingForAnswer = state.waiting_for_answer;
-    
-    console.log('Game state:', state);
-    console.log('User:', user.userType);
-    console.log('Is my turn:', isMyTurn);
-    console.log('Waiting for answer:', waitingForAnswer);
-    
-    if (waitingForAnswer && isMyTurn) {
-      setButtonState('SENT');
-    } else if (waitingForAnswer && !isMyTurn) {
-      setButtonState('ANSWER FIRST');
-    } else if (!waitingForAnswer && isMyTurn) {
-      setButtonState('PLAY A GAME');
-    } else {
-      setButtonState('WAIT FOR TURN');
-    }
-    
-    setIsMyTurn(isMyTurn && !waitingForAnswer);
+    // Simple logic: if it's my turn and not waiting, I can play
+    const canPlay = (state.current_turn === userChoice) && !state.waiting_for_answer;
+    setIsMyTurn(canPlay);
   };
 
 
 
   const getRandomQuestion = () => {
-    const receiverId = user.userType === 'nelson' ? 'juliana' : 'nelson';
+    const receiverId = userChoice === 'nelson' ? 'juliana' : 'nelson';
     const isForHer = receiverId === 'juliana';
     
     // Filter dares based on who will receive them
@@ -177,11 +160,10 @@ export default function TruthOrDareScreen() {
   const playGame = async () => {
     console.log('=== PLAY GAME FUNCTION CALLED ===');
     console.log('Is my turn:', isMyTurn);
-    console.log('User:', user);
+    console.log('User:', userChoice);
     console.log('Game state:', gameState);
     
-    if (!user) {
-      console.log('❌ No user found');
+    if (!userChoice) {
       alert('No user found. Please refresh and login again.');
       return;
     }
@@ -226,8 +208,8 @@ export default function TruthOrDareScreen() {
   };
 
   const sendQuestionToPartner = async (type, question) => {
-    const senderId = user.userType;
-    const receiverId = user.userType === 'nelson' ? 'juliana' : 'nelson';
+    const senderId = userChoice;
+    const receiverId = userChoice === 'nelson' ? 'juliana' : 'nelson';
     
     const messageText = `🎮 Truth or Dare Game\n\n${type}: ${question}\n\n💬 Answer this question in chat to continue our game! 😘`;
     
@@ -243,11 +225,11 @@ export default function TruthOrDareScreen() {
 
   const answerReceived = async () => {
     console.log('=== ANSWER RECEIVED ===');
-    console.log('Current user:', user.userType);
+    console.log('Current user:', userChoice);
     console.log('Current game state:', gameState);
     
     // The person who answered should get the next turn
-    const nextTurn = user.userType; // The person clicking this button answered, so they get next turn
+    const nextTurn = userChoice; // The person clicking this button answered, so they get next turn
     
     console.log('Setting next turn to:', nextTurn);
     
@@ -289,89 +271,42 @@ export default function TruthOrDareScreen() {
 
       <div className="game-status">
         <div className="turn-indicator">
-          <h3>Current Turn: {gameState.current_turn === 'nelson' ? 'Nelson (Him 👨)' : 'Juliana (Her 👩)'}</h3>
-          {gameState.waiting_for_answer && (
-            <p className="waiting-text">⏳ Waiting for {gameState.current_turn === 'nelson' ? 'his' : 'her'} partner to answer...</p>
-          )}
+          <div className="current-player">
+            <span className={`player-name ${userChoice}`}>
+              {userChoice?.toUpperCase() || 'LOADING'}
+            </span>
+            <span className="turn-label">
+              {isMyTurn ? 'YES' : 'NO'}
+            </span>
+          </div>
         </div>
       </div>
 
       <div className="game-button-container">
         <button 
-          className={`game-button ${buttonState.toLowerCase().replace(/\s+/g, '-')}`}
-          onClick={() => {
-            console.log('Button clicked!');
-            playGame();
-          }}
+          className={`game-button ${isMyTurn ? 'active' : 'disabled'}`}
+          onClick={playGame}
           disabled={!isMyTurn}
-          style={{ cursor: 'pointer' }}
         >
           <div className="button-icon">🎮</div>
-          <div className="button-text">{buttonState}</div>
+          <div className="button-text">
+            {isMyTurn ? 'PLAY A GAME' : 'WAIT FOR TURN'}
+          </div>
           <div className="button-subtitle">
-            {buttonState === 'PLAY A GAME' && `Tap to send random Truth or Dare to ${user?.userType === 'nelson' ? 'her' : 'him'}`}
-            {buttonState === 'SENT' && `Question sent to ${user?.userType === 'nelson' ? 'her' : 'him'}! Wait for answer`}
-            {buttonState === 'WAIT FOR TURN' && `Wait for ${user?.userType === 'nelson' ? 'her' : 'his'} turn`}
-            {buttonState === 'ANSWER FIRST' && `Answer ${user?.userType === 'nelson' ? 'her' : 'his'} question in chat first`}
+            {isMyTurn ? `Send Truth or Dare to ${userChoice === 'nelson' ? 'Juliana' : 'Nelson'}` : 'Not your turn'}
           </div>
         </button>
       </div>
       
-      {/* Debug Panel */}
-      <div className="debug-panel">
-        <div className="debug-header">
-          <span className="debug-icon">🔧</span>
-          <h4>Game Debug Panel</h4>
-        </div>
-        <div className="debug-grid">
-          <div className="debug-item">
-            <span className="debug-label">User:</span>
-            <span className={`debug-value ${user?.userType === 'nelson' ? 'nelson' : 'juliana'}`}>
-              {user?.userType || 'Not loaded'}
-            </span>
-          </div>
-          <div className="debug-item">
-            <span className="debug-label">Current Turn:</span>
-            <span className={`debug-value ${gameState.current_turn === 'nelson' ? 'nelson' : 'juliana'}`}>
-              {gameState.current_turn}
-            </span>
-          </div>
-          <div className="debug-item">
-            <span className="debug-label">Waiting:</span>
-            <span className={`debug-value ${gameState.waiting_for_answer ? 'waiting' : 'ready'}`}>
-              {gameState.waiting_for_answer ? 'Yes' : 'No'}
-            </span>
-          </div>
-          <div className="debug-item">
-            <span className="debug-label">My Turn:</span>
-            <span className={`debug-value ${isMyTurn ? 'active' : 'inactive'}`}>
-              {isMyTurn ? 'Yes' : 'No'}
-            </span>
-          </div>
-          <div className="debug-item">
-            <span className="debug-label">Button State:</span>
-            <span className="debug-value state">{buttonState}</span>
-          </div>
-        </div>
-        <button 
-          className="debug-test-btn"
-          onClick={() => {
-            console.log('Test button clicked');
-            alert('🎮 Test button works! Game is functioning properly.');
-          }}
-        >
-          <span className="test-icon">🧪</span>
-          Test Connection
-        </button>
-      </div>
+
 
       <div className="game-info">
         <div className="info-card">
           <h4>How it works:</h4>
           <ul>
-            <li>Tap "PLAY A GAME" to send a random Truth or Dare to {user?.userType === 'nelson' ? 'her' : 'him'}</li>
-            <li>Questions are sent to {user?.userType === 'nelson' ? 'her' : 'his'} chat</li>
-            <li>Answer {user?.userType === 'nelson' ? 'her' : 'his'} questions in chat to switch turns</li>
+            <li>Tap "PLAY A GAME" to send a random Truth or Dare to {userChoice === 'nelson' ? 'Juliana' : 'Nelson'}</li>
+            <li>Questions are sent to {userChoice === 'nelson' ? 'Juliana\'s' : 'Nelson\'s'} chat</li>
+            <li>Answer {userChoice === 'nelson' ? 'Juliana\'s' : 'Nelson\'s'} questions in chat to switch turns</li>
             <li>Take turns asking each other spicy questions! 🔥</li>
           </ul>
         </div>
@@ -379,8 +314,8 @@ export default function TruthOrDareScreen() {
 
       {gameState.waiting_for_answer && (
         <div className="answer-prompt">
-          <p>💬 {gameState.current_turn === user?.userType ? `Waiting for ${user?.userType === 'nelson' ? 'her' : 'him'} to answer...` : `${gameState.current_turn === 'nelson' ? 'He' : 'She'} sent you a Truth or Dare question! Answer it to continue the game.`}</p>
-          {gameState.current_turn !== user?.userType && (
+          <p>💬 {gameState.current_turn === userChoice ? `Waiting for ${userChoice === 'nelson' ? 'Juliana' : 'Nelson'} to answer...` : `${gameState.current_turn === 'nelson' ? 'Nelson' : 'Juliana'} sent you a Truth or Dare question! Answer it to continue the game.`}</p>
+          {gameState.current_turn !== userChoice && (
             <button className="answer-btn" onClick={answerReceived}>
               I Answered in Chat
             </button>

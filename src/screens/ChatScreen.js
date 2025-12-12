@@ -29,7 +29,7 @@ export default function ChatScreen() {
   const [user, setUser] = useState(null);
   const [isTyping, setIsTyping] = useState(false);
   const [partnerTyping, setPartnerTyping] = useState(false);
-  const [onlineStatus, setOnlineStatus] = useState(false);
+
   const [replyTo, setReplyTo] = useState(null);
   const [recording, setRecording] = useState(false);
   const messagesEndRef = useRef(null);
@@ -41,24 +41,15 @@ export default function ChatScreen() {
     loadMessages();
     const messagesSub = subscribeToMessages();
     const typingSub = subscribeToTyping();
-    const statusSub = subscribeToOnlineStatus();
+
 
     // Cleanup function
     return () => {
       if (messagesSub) messagesSub();
       if (typingSub) typingSub();
-      if (statusSub) statusSub();
+
       
-      // Set user offline when leaving
-      if (user?.userType) {
-        supabase
-          .from('user_status')
-          .upsert({
-            user_id: user.userType,
-            is_online: false,
-            last_seen: new Date().toISOString()
-          });
-      }
+
     };
   }, []);
 
@@ -70,26 +61,7 @@ export default function ChatScreen() {
       const userData = { ...session.user, userType };
       setUser(userData);
       
-      // Set user online
-      await supabase
-        .from('user_status')
-        .upsert({
-          user_id: userData.userType,
-          is_online: true,
-          last_seen: new Date().toISOString()
-        });
 
-      // Load partner's online status
-      const partnerId = userData.userType === 'nelson' ? 'juliana' : 'nelson';
-      const { data } = await supabase
-        .from('user_status')
-        .select('is_online')
-        .eq('user_id', partnerId)
-        .single();
-      
-      if (data) {
-        setOnlineStatus(data.is_online);
-      }
     }
   };
 
@@ -153,23 +125,7 @@ export default function ChatScreen() {
     return () => subscription.unsubscribe();
   };
 
-  const subscribeToOnlineStatus = () => {
-    const subscription = supabase
-      .channel('online_status')
-      .on('postgres_changes',
-        { event: '*', schema: 'public', table: 'user_status' },
-        (payload) => {
-          const partnerId = user?.userType === 'nelson' ? 'juliana' : 'nelson';
-          
-          if (payload.new.user_id === partnerId) {
-            setOnlineStatus(payload.new.is_online);
-          }
-        }
-      )
-      .subscribe();
 
-    return () => subscription.unsubscribe();
-  };
 
   const scrollToBottom = () => {
     setTimeout(() => {
@@ -382,8 +338,9 @@ export default function ChatScreen() {
       .eq('id', messageId);
   };
 
-  const isNelson = user?.userType === 'nelson';
-  const partnerName = isNelson ? 'Juliana' : 'Nelson';
+  const userChoice = localStorage.getItem('userChoice');
+  const partnerName = userChoice === 'nelson' ? 'Juliana' : 'Nelson';
+  const isNelson = userChoice === 'nelson';
 
   return (
     <div className="chat-container">
@@ -392,17 +349,15 @@ export default function ChatScreen() {
       {/* Chat Header */}
       <div className="chat-header">
         <div className="partner-info">
-          <div className={`partner-avatar ${isNelson ? 'juliana-avatar' : 'nelson-avatar'}`}>
-            {isNelson ? 'J' : 'N'}
+          <div className={`partner-avatar ${!isNelson ? 'nelson-avatar' : 'juliana-avatar'}`}>
+            {!isNelson ? 'N' : 'J'}
           </div>
           <div className="partner-details">
-            <h3 className="partner-name">{partnerName}</h3>
+            <h3 className={`partner-name ${!isNelson ? 'nelson-name' : 'juliana-name'}`}>
+              {partnerName}
+            </h3>
             <p className="partner-status">
-              {onlineStatus ? (
-                <span className="online">◉ Online</span>
-              ) : (
-                <span className="offline">◯ Offline</span>
-              )}
+              <span className="love-quote">"Love knows no distance" 💕</span>
             </p>
           </div>
         </div>

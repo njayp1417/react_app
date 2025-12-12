@@ -9,6 +9,7 @@ import GalleryScreen from './screens/GalleryScreen';
 import ChatScreen from './screens/ChatScreen';
 import Navigation from './components/Navigation';
 import IntroAnimation from './components/IntroAnimation';
+import LoginAnimation from './components/LoginAnimation';
 import './App.css';
 
 function MainApp() {
@@ -32,12 +33,19 @@ export default function App() {
   const [user, setUser] = useState(null);
   const [initializing, setInitializing] = useState(true);
   const [showIntro, setShowIntro] = useState(true);
+  const [showLoginAnimation, setShowLoginAnimation] = useState(false);
 
 
 
   useEffect(() => {
+    // Add timeout to prevent infinite loading
+    const timeout = setTimeout(() => {
+      setInitializing(false);
+    }, 3000);
+
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
+      clearTimeout(timeout);
       if (session?.user) {
         // Server-side security handles authorization
         const userType = session.user.email === 'nelsonasagwara81@gmail.com' ? 'nelson' : 'juliana';
@@ -55,27 +63,51 @@ export default function App() {
         localStorage.removeItem('selectedUserType');
       }
       setInitializing(false);
+    }).catch(() => {
+      clearTimeout(timeout);
+      setInitializing(false);
     });
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        if (session?.user) {
-          // Server-side security handles authorization
+        console.log('Auth event:', event, 'Session:', session);
+        
+        if (event === 'SIGNED_OUT' || session === null) {
+          console.log('User signed out - clearing state');
+          setUser(null);
+          setShowLoginAnimation(false);
+          localStorage.clear();
+          sessionStorage.clear();
+          return;
+        }
+        
+        if (session?.user && event === 'SIGNED_IN') {
+          // Show login animation for new sign-ins
           const userType = session.user.email === 'nelsonasagwara81@gmail.com' ? 'nelson' : 'juliana';
-          setUser({ 
+          const userData = { 
             ...session.user, 
             userType,
             displayName: userType === 'nelson' ? 'Nelson' : 'Juliana'
-          });
+          };
+          
+          setShowLoginAnimation(true);
+          setUser(userData);
+          
           await supabase.from('user_status').upsert({
             user_id: userType,
             is_online: true,
             last_seen: new Date().toISOString()
           });
           localStorage.removeItem('selectedUserType');
-        } else {
-          setUser(null);
+        } else if (session?.user) {
+          // Existing session, no animation
+          const userType = session.user.email === 'nelsonasagwara81@gmail.com' ? 'nelson' : 'juliana';
+          setUser({ 
+            ...session.user, 
+            userType,
+            displayName: userType === 'nelson' ? 'Nelson' : 'Juliana'
+          });
         }
       }
     );
@@ -83,10 +115,19 @@ export default function App() {
     return () => subscription.unsubscribe();
   }, []);
 
-  if (initializing) return <div className="loading">Loading...</div>;
+  if (initializing) return <div className="loading"><span>Loading...</span></div>;
 
   if (showIntro) {
     return <IntroAnimation onComplete={() => setShowIntro(false)} />;
+  }
+
+  if (showLoginAnimation && user) {
+    return (
+      <LoginAnimation 
+        userName={user.displayName} 
+        onComplete={() => setShowLoginAnimation(false)} 
+      />
+    );
   }
 
   return (

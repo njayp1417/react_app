@@ -52,9 +52,27 @@
 .partner-name {
   font-size: 18px;
   font-weight: 700;
-  color: #ffd700;
   margin: 0 0 5px 0;
   font-family: 'Inter', 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #ffd700 0%, #000000 50%, #ffd700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+.nelson-name {
+  background: linear-gradient(135deg, #ffd700 0%, #000000 30%, #ffd700 60%, #000000 90%, #ffd700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.juliana-name {
+  background: linear-gradient(135deg, #ffd700 0%, #000000 30%, #ffd700 60%, #000000 90%, #ffd700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .partner-status {

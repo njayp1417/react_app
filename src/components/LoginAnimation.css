@@ -1,0 +1,227 @@
+.login-animation-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at center, #0a0a0a 0%, #000000 100%);
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.login-galaxy-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.login-stars, .login-stars2, .login-stars3 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+}
+
+.login-stars {
+  background-image: 
+    radial-gradient(2px 2px at 20px 30px, #eee, transparent),
+    radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+    radial-gradient(1px 1px at 90px 40px, #fff, transparent);
+  background-repeat: repeat;
+  background-size: 200px 100px;
+  animation: sparkle 3s linear infinite;
+}
+
+.login-stars2 {
+  background-image: 
+    radial-gradient(1px 1px at 40px 60px, #fff, transparent),
+    radial-gradient(1px 1px at 120px 25px, rgba(255,255,255,0.6), transparent);
+  background-repeat: repeat;
+  background-size: 300px 150px;
+  animation: sparkle 2s linear infinite reverse;
+}
+
+.login-stars3 {
+  background-image: 
+    radial-gradient(1px 1px at 10px 10px, #ffd700, transparent),
+    radial-gradient(1px 1px at 150px 80px, rgba(255,215,0,0.4), transparent);
+  background-repeat: repeat;
+  background-size: 250px 120px;
+  animation: sparkle 4s linear infinite;
+}
+
+@keyframes sparkle {
+  from { transform: translateY(0px); }
+  to { transform: translateY(-100px); }
+}
+
+.login-prism {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  background: linear-gradient(135deg, 
+    rgba(255, 215, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.8) 50%,
+    rgba(255, 215, 0, 0.9) 100%
+  );
+  border: 3px solid #ffd700;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: scale(1) rotate(0deg);
+  transition: all 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 
+    0 0 30px rgba(255, 215, 0, 0.5),
+    inset 0 0 30px rgba(255, 215, 0, 0.2);
+}
+
+.login-prism.expanding {
+  transform: scale(1.5) rotate(180deg);
+  box-shadow: 
+    0 0 60px rgba(255, 215, 0, 0.8),
+    inset 0 0 40px rgba(255, 215, 0, 0.4);
+}
+
+.login-prism.transitioning {
+  transform: scale(3) rotate(360deg);
+  opacity: 0.8;
+  box-shadow: 
+    0 0 100px rgba(255, 215, 0, 1),
+    inset 0 0 60px rgba(255, 215, 0, 0.6);
+}
+
+.prism-glow-effect {
+  position: absolute;
+  top: -20px;
+  left: -20px;
+  right: -20px;
+  bottom: -20px;
+  background: radial-gradient(circle, rgba(255, 215, 0, 0.3) 0%, transparent 70%);
+  border-radius: 30px;
+  animation: pulse-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes pulse-glow {
+  0% { transform: scale(1); opacity: 0.5; }
+  100% { transform: scale(1.1); opacity: 0.8; }
+}
+
+.prism-inner {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: #fff;
+}
+
+.prism-name-display {
+  font-size: 2.5rem;
+  font-weight: 900;
+  font-family: 'Arial Black', sans-serif;
+  text-shadow: 
+    2px 2px 4px rgba(0, 0, 0, 0.8),
+    0 0 10px rgba(255, 215, 0, 0.6);
+  margin-bottom: 10px;
+  animation: name-glow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes name-glow {
+  0% { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8), 0 0 10px rgba(255, 215, 0, 0.6); }
+  100% { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 215, 0, 1); }
+}
+
+.prism-welcome {
+  font-size: 1rem;
+  font-weight: 600;
+  opacity: 0.9;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.prism-particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #ffd700;
+  border-radius: 50%;
+  animation: float-particle 3s ease-in-out infinite;
+}
+
+.particle-0 { top: 10%; left: 10%; animation-delay: 0s; }
+.particle-1 { top: 20%; left: 80%; animation-delay: 0.2s; }
+.particle-2 { top: 80%; left: 20%; animation-delay: 0.4s; }
+.particle-3 { top: 70%; left: 90%; animation-delay: 0.6s; }
+.particle-4 { top: 30%; left: 5%; animation-delay: 0.8s; }
+.particle-5 { top: 90%; left: 70%; animation-delay: 1s; }
+.particle-6 { top: 5%; left: 50%; animation-delay: 1.2s; }
+.particle-7 { top: 60%; left: 15%; animation-delay: 1.4s; }
+.particle-8 { top: 40%; left: 85%; animation-delay: 1.6s; }
+.particle-9 { top: 85%; left: 45%; animation-delay: 1.8s; }
+.particle-10 { top: 15%; left: 75%; animation-delay: 2s; }
+.particle-11 { top: 75%; left: 35%; animation-delay: 2.2s; }
+.particle-12 { top: 35%; left: 65%; animation-delay: 2.4s; }
+.particle-13 { top: 65%; left: 25%; animation-delay: 2.6s; }
+.particle-14 { top: 25%; left: 95%; animation-delay: 2.8s; }
+.particle-15 { top: 95%; left: 55%; animation-delay: 3s; }
+.particle-16 { top: 55%; left: 5%; animation-delay: 3.2s; }
+.particle-17 { top: 45%; left: 75%; animation-delay: 3.4s; }
+.particle-18 { top: 75%; left: 85%; animation-delay: 3.6s; }
+.particle-19 { top: 85%; left: 15%; animation-delay: 3.8s; }
+
+@keyframes float-particle {
+  0%, 100% { 
+    transform: translateY(0px) scale(1);
+    opacity: 0.6;
+  }
+  50% { 
+    transform: translateY(-20px) scale(1.2);
+    opacity: 1;
+  }
+}
+
+.transition-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, rgba(0, 0, 0, 0.9) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fade-in 1s ease-in-out;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.transition-text {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #ffd700;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  animation: text-pulse 1s ease-in-out infinite alternate;
+}
+
+@keyframes text-pulse {
+  0% { opacity: 0.7; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1.05); }
+}

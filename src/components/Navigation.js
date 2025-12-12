@@ -14,36 +14,12 @@ export default function Navigation() {
     { path: '/profile', icon: '●', label: 'Profile' },
   ];
 
-  const handleSignOut = async () => {
-    try {
-      // Get current user before signing out
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (session?.user) {
-        const userType = session.user.user_metadata?.user_type || 
-                        (session.user.email?.includes('nelson') ? 'nelson' : 'juliana');
-        
-        // Set user offline before logout
-        await supabase
-          .from('user_status')
-          .upsert({
-            user_id: userType,
-            is_online: false,
-            last_seen: new Date().toISOString()
-          });
-      }
-      
-      // Clear any cached data
-      localStorage.removeItem('loveapp_user');
-      
-      // Sign out from Supabase
-      await supabase.auth.signOut();
-      
-    } catch (error) {
-      console.error('Logout error:', error);
-      // Force logout even if there's an error
-      await supabase.auth.signOut();
-    }
+  const handleSignOut = () => {
+    console.log('Signing out...');
+    localStorage.clear();
+    sessionStorage.clear();
+    supabase.auth.signOut();
+    window.location.href = window.location.origin;
   };
 
   return (
